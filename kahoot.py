@@ -28,6 +28,8 @@ class Bot:
     def run(self, game_pin, nickname):
         """Run the bot. Connects the bot to the game pin specified, with the nickname specified."""
 
+        logging.info("Connecting to kahoot")
+
         #set selenium options to headless mode, then connect to browser instance
         opts = Options()
         opts.set_headless()
@@ -73,7 +75,10 @@ class Bot:
 
     def input_nick(self, nick):
         """Find nickname input and submit"""
-        nickname_form = self.browser.find_element_by_id("nickname")
+        try:
+            nickname_form = self.browser.find_element_by_id("nickname")
+        except selenium.common.exceptions.NoSuchElementException:
+            raise ValueError("Invalid game pin")
         nickname_form.send_keys(nick)
         nickname_form.submit()
 
